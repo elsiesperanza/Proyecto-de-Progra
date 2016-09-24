@@ -48,10 +48,7 @@
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="txtInfinitivo" max="32767" attributes="0"/>
                                           <Component id="txtPasadoSimple" alignment="0" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtEspanol" max="32767" attributes="0"/>
-                                          </Group>
+                                          <Component id="txtEspanol" alignment="0" max="32767" attributes="0"/>
                                           <Component id="txtPasadoParticipio" alignment="0" pref="335" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -178,6 +175,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Registrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRegistrarMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

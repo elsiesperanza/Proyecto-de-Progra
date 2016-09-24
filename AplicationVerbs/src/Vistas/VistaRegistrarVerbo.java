@@ -5,6 +5,13 @@
  */
 package Vistas;
 
+import Bean.EspanolBean;
+import Bean.InfinitivoBean;
+import Bean.PasadoParticipioBean;
+import Bean.PasadoSimpleBean;
+import Dao.RegistrarVerboDao;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
@@ -67,6 +74,11 @@ public class VistaRegistrarVerbo extends javax.swing.JFrame {
         jLabel5.setText("Pasado participio:");
 
         btnRegistrar.setText("Registrar");
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,9 +107,7 @@ public class VistaRegistrarVerbo extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtInfinitivo)
                                             .addComponent(txtPasadoSimple)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtEspanol))
+                                            .addComponent(txtEspanol)
                                             .addComponent(txtPasadoParticipio, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))))))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -144,10 +154,54 @@ public class VistaRegistrarVerbo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        VistaPrincipal vistaPrincipal= new VistaPrincipal();
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
         vistaPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseClicked
+
+        if (!txtEspanol.getText().isEmpty() && !txtInfinitivo.getText().isEmpty()
+                && !txtPasadoSimple.getText().isEmpty() && !txtPasadoParticipio.getText().isEmpty()) {
+
+            boolean encontrado = RegistrarVerboDao.verificarVerbo(txtEspanol.getText());
+
+            if (!encontrado) {
+                EspanolBean espanolBean = new EspanolBean();
+                InfinitivoBean infinitivoBean = new InfinitivoBean();
+                PasadoSimpleBean pasadoSimpleBean = new PasadoSimpleBean();
+                PasadoParticipioBean pasadoParticipioBean = new PasadoParticipioBean();
+
+                espanolBean.setNombreEspanol(txtEspanol.getText());
+                infinitivoBean.setNombreInfinitivo(txtInfinitivo.getText());
+                pasadoSimpleBean.setNombrePasadoSimple(txtPasadoSimple.getText());
+                pasadoParticipioBean.setNombrePasadoParticipio(txtPasadoParticipio.getText());
+
+                boolean registrado = RegistrarVerboDao.registrarVerbo(espanolBean, infinitivoBean,
+                        pasadoSimpleBean, pasadoParticipioBean);
+
+                if (registrado) {
+                    JOptionPane.showMessageDialog(this, "Verbo registrado");
+                    txtEspanol.setText("");
+                    txtInfinitivo.setText("");
+                    txtPasadoParticipio.setText("");
+                    txtPasadoSimple.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Verbo registrado");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "El verbo -" + txtEspanol.getText() + "- ha sido registrado anteriormente");
+                txtEspanol.setText("");
+                txtInfinitivo.setText("");
+                txtPasadoParticipio.setText("");
+                txtPasadoSimple.setText("");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Favor de llenar todos los campos");
+        }
+
+
+    }//GEN-LAST:event_btnRegistrarMouseClicked
 
     /**
      * @param args the command line arguments
