@@ -5,12 +5,20 @@
  */
 package Vistas;
 
+import Bean.VerboBean;
+import Dao.ListaVerboDao;
+import Dao.VerboEliminadoDao;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Admin
  */
 public class VistaListaVerbo extends javax.swing.JFrame {
 
+    DefaultTableModel tabla;
+    
     /**
      * Creates new form VistaListaVerbo
      */
@@ -18,6 +26,7 @@ public class VistaListaVerbo extends javax.swing.JFrame {
         initComponents();
         setResizable(false);//no se maximice la pantalla
         setLocationRelativeTo(null);//aparezca enmedio
+        this.consultarVerbos();
     }
 
     /**
@@ -32,15 +41,16 @@ public class VistaListaVerbo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaVerbos = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
+        btnVerbosEliminados = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setText("Lista de verbos");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaVerbos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -51,12 +61,24 @@ public class VistaListaVerbo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaVerbos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaVerbosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tablaVerbos);
 
         btnRegresar.setText("Regresar");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
+            }
+        });
+
+        btnVerbosEliminados.setText("Papeleria de reciclaje");
+        btnVerbosEliminados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVerbosEliminadosMouseClicked(evt);
             }
         });
 
@@ -80,6 +102,8 @@ public class VistaListaVerbo extends javax.swing.JFrame {
                         .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnVerbosEliminados)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRegresar)))
                 .addContainerGap())
         );
@@ -93,7 +117,9 @@ public class VistaListaVerbo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRegresar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegresar)
+                    .addComponent(btnVerbosEliminados))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -106,6 +132,33 @@ public class VistaListaVerbo extends javax.swing.JFrame {
             this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnVerbosEliminadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerbosEliminadosMouseClicked
+        
+        VistaVerbosEliminados vistaVerbosEliminados = new VistaVerbosEliminados();
+        vistaVerbosEliminados.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVerbosEliminadosMouseClicked
+
+    private void tablaVerbosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaVerbosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tablaVerbosMouseClicked
+
+    
+    public void consultarVerbos() {
+        tabla = new DefaultTableModel(new String[]{"Español", "Infinitivo", "Pasado simple",
+            "Pasado participio",}, 0);
+
+        List<VerboBean> listaVerbos = ListaVerboDao.consultarVerbos();
+        
+
+        for (VerboBean verbo : listaVerbos) {
+            Object[] objeto = {verbo.getNombreEspanol(), verbo.getNombreInfinitivo(),
+                verbo.getNombrePasadoSimple(), verbo.getNombrePasadoParticipio()};
+            tabla.addRow(objeto);
+        }
+
+        tablaVerbos.setModel(tabla);
+    }
     /**
      * @param args the command line arguments
      */
@@ -143,9 +196,10 @@ public class VistaListaVerbo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnVerbosEliminados;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaVerbos;
     // End of variables declaration//GEN-END:variables
 }

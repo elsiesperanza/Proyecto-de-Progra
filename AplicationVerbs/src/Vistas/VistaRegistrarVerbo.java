@@ -164,9 +164,10 @@ public class VistaRegistrarVerbo extends javax.swing.JFrame {
         if (!txtEspanol.getText().isEmpty() && !txtInfinitivo.getText().isEmpty()
                 && !txtPasadoSimple.getText().isEmpty() && !txtPasadoParticipio.getText().isEmpty()) {
 
-            boolean encontrado = RegistrarVerboDao.verificarVerbo(txtEspanol.getText());
+            boolean encontradoRegistrado = RegistrarVerboDao.verificarVerbo(txtEspanol.getText());
+            boolean encontradoPapeleria = RegistrarVerboDao.buscarPapeleria(txtEspanol.getText());
 
-            if (!encontrado) {
+            if (!encontradoRegistrado&&!encontradoPapeleria) {
                 EspanolBean espanolBean = new EspanolBean();
                 InfinitivoBean infinitivoBean = new InfinitivoBean();
                 PasadoSimpleBean pasadoSimpleBean = new PasadoSimpleBean();
@@ -190,7 +191,12 @@ public class VistaRegistrarVerbo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Verbo registrado");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "El verbo -" + txtEspanol.getText() + "- ha sido registrado anteriormente");
+                if (encontradoRegistrado) {
+                    JOptionPane.showMessageDialog(this, "El verbo -" + txtEspanol.getText() + "- ha sido registrado anteriormente");
+                } else if(encontradoPapeleria){
+                    JOptionPane.showMessageDialog(this, "El verbo -" + txtEspanol.getText() + "- ha sido encontrado en papeleria");
+                }
+                
                 txtEspanol.setText("");
                 txtInfinitivo.setText("");
                 txtPasadoParticipio.setText("");

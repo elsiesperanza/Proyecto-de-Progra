@@ -84,7 +84,7 @@ public class RegistrarVerboDao {
         boolean encontrado = false;
         try {
             Connection conexion = ConexionSQL.getConnection();
-            consultaSql = "SELECT ? WHERE ? IN (SELECT nombre FROM Espanol)";
+            consultaSql = "SELECT ? WHERE ? IN (SELECT nombre FROM Espanol WHERE estado=1)";
             PreparedStatement ps = conexion.prepareStatement(consultaSql);
             ps.setString(1, verboEspanol);
             ps.setString(2, verboEspanol);
@@ -100,4 +100,27 @@ public class RegistrarVerboDao {
         }
         return encontrado;
     }
+    
+    public static boolean buscarPapeleria(String verboEspanol) {
+        boolean encontrado = false;
+        try {
+            Connection conexion = ConexionSQL.getConnection();
+            consultaSql = "SELECT ? WHERE ? IN (SELECT nombre FROM Espanol WHERE estado=0)";
+            PreparedStatement ps = conexion.prepareStatement(consultaSql);
+            ps.setString(1, verboEspanol);
+            ps.setString(2, verboEspanol);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                encontrado = true;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error ocurrido en RegistrarVerboDao.verificarVerbo");
+        }
+        return encontrado;
+    }
+    
+    
 }
