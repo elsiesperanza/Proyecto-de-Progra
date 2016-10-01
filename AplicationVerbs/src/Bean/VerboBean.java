@@ -16,6 +16,9 @@ public class VerboBean {
     String nombrePasadoSimple;
     String nombrePasadoParticipio;
     int idEspanol;
+    int idInfinitivo;
+    int idPasadoSimple;
+    int idPasadoParticipio;
 
     public String getNombreEspanol() {
         return nombreEspanol;
@@ -55,6 +58,30 @@ public class VerboBean {
 
     public void setIdEspanol(int idEspanol) {
         this.idEspanol = idEspanol;
+    }
+
+    public int getIdInfinitivo() {
+        return idInfinitivo;
+    }
+
+    public void setIdInfinitivo(int idInfinitivo) {
+        this.idInfinitivo = idInfinitivo;
+    }
+
+    public int getIdPasadoSimple() {
+        return idPasadoSimple;
+    }
+
+    public void setIdPasadoSimple(int idPasadoSimple) {
+        this.idPasadoSimple = idPasadoSimple;
+    }
+
+    public int getIdPasadoParticipio() {
+        return idPasadoParticipio;
+    }
+
+    public void setIdPasadoParticipio(int idPasadoParticipio) {
+        this.idPasadoParticipio = idPasadoParticipio;
     }
     
     

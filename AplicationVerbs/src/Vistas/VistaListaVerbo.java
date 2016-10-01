@@ -173,15 +173,10 @@ public class VistaListaVerbo extends javax.swing.JFrame {
 
         } else if (respuesta.equals("Modificar verbo")) {
 
-            dialogButton = JOptionPane.showConfirmDialog(null, "¿Desea modificar el verbo?", "Modificar verbo",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (dialogButton == JOptionPane.YES_OPTION) {
-
-            } else if (dialogButton == JOptionPane.NO_OPTION) {
-
-            }
-
+            VistaModificarVerbo vistaModificarVerbo = new VistaModificarVerbo(this, this.idVerbo);
+            vistaModificarVerbo.setVisible(true);
+            vistaModificarVerbo.setLocationRelativeTo(this);
+            this.consultarVerbos();
         }
     }//GEN-LAST:event_tablaVerbosMouseClicked
 

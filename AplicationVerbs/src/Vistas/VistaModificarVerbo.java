@@ -5,17 +5,38 @@
  */
 package Vistas;
 
+import Bean.VerboBean;
+import Dao.ModificarVerboDao;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
  */
-public class VistaModificarVerbo extends javax.swing.JFrame {
+public class VistaModificarVerbo extends JFrame {
 
     /**
      * Creates new form VistaModificarVerbo
      */
-    public VistaModificarVerbo() {
+    private int idVerbo;
+    private JFrame parent;
+
+    public VistaModificarVerbo(JFrame parentParam, int idVerboParam) {
         initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        this.parent = parentParam;
+        parent.setVisible(false);
+        this.idVerbo = idVerboParam;
+
+        VerboBean verboBean = ModificarVerboDao.consultarVerbos(this.idVerbo);
+        txtEspanol.setText(verboBean.getNombreEspanol());
+        txtInfinitivo.setText(verboBean.getNombreInfinitivo());
+        txtPasadoSimple.setText(verboBean.getNombrePasadoSimple());
+        txtPasadoParticipio.setText(verboBean.getNombrePasadoParticipio());
+
     }
 
     /**
@@ -29,23 +50,85 @@ public class VistaModificarVerbo extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtEspanol = new javax.swing.JTextField();
+        txtInfinitivo = new javax.swing.JTextField();
+        txtPasadoSimple = new javax.swing.JTextField();
+        txtPasadoParticipio = new javax.swing.JTextField();
+        btnRegresar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setText("Modificar verbo");
 
+        jLabel2.setText("Español:");
+
+        jLabel3.setText("Infinitivo:");
+
+        jLabel4.setText("Pasado Simple");
+
+        jLabel5.setText("Pasado participio:");
+
+        txtEspanol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEspanolActionPerformed(evt);
+            }
+        });
+
+        btnRegresar.setText("Regresar");
+        btnRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegresarMouseClicked(evt);
+            }
+        });
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGuardarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(138, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(120, 120, 120))
+                .addContainerGap(161, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(120, 120, 120))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnGuardar)
+                        .addGap(163, 163, 163))))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnRegresar)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtPasadoSimple, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                                    .addComponent(txtInfinitivo, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtEspanol, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPasadoParticipio))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -55,11 +138,62 @@ public class VistaModificarVerbo extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(259, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtEspanol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtInfinitivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtPasadoSimple, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtPasadoParticipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegresar)
+                    .addComponent(btnGuardar))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtEspanolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEspanolActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEspanolActionPerformed
+
+    private void btnRegresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseClicked
+
+        this.dispose();
+        parent.setVisible(true);
+    }//GEN-LAST:event_btnRegresarMouseClicked
+
+    private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
+
+        VerboBean verbo = new VerboBean();
+        verbo.setIdEspanol(this.idVerbo);
+        verbo.setNombreEspanol(txtEspanol.getText().toString());
+        verbo.setNombreInfinitivo(txtInfinitivo.getText().toString());
+        verbo.setNombrePasadoSimple(txtPasadoSimple.getText().toString());
+        verbo.setNombrePasadoParticipio(txtPasadoParticipio.getText().toString());
+
+        boolean modificado = ModificarVerboDao.modificarVerbo(verbo);
+
+        if (modificado) {
+            JOptionPane.showMessageDialog(null, "Verbo modificado correctamente");
+            this.dispose();
+            parent.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
+        }
+
+    }//GEN-LAST:event_btnGuardarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -91,13 +225,23 @@ public class VistaModificarVerbo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VistaModificarVerbo().setVisible(true);
+//                new VistaModificarVerbo().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField txtEspanol;
+    private javax.swing.JTextField txtInfinitivo;
+    private javax.swing.JTextField txtPasadoParticipio;
+    private javax.swing.JTextField txtPasadoSimple;
     // End of variables declaration//GEN-END:variables
 }
