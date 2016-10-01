@@ -9,6 +9,7 @@ import Bean.VerboBean;
 import Dao.ListaVerboDao;
 import Dao.VerboEliminadoDao;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,7 +19,8 @@ import javax.swing.table.DefaultTableModel;
 public class VistaListaVerbo extends javax.swing.JFrame {
 
     DefaultTableModel tabla;
-    
+    private int idVerbo;
+
     /**
      * Creates new form VistaListaVerbo
      */
@@ -127,38 +129,77 @@ public class VistaListaVerbo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-            VistaPrincipal vistaPrincipal = new VistaPrincipal();
-            vistaPrincipal.setVisible(true);
-            this.dispose();
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
+        vistaPrincipal.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnVerbosEliminadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerbosEliminadosMouseClicked
-        
+
         VistaVerbosEliminados vistaVerbosEliminados = new VistaVerbosEliminados();
         vistaVerbosEliminados.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVerbosEliminadosMouseClicked
 
     private void tablaVerbosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaVerbosMouseClicked
-        // TODO add your handling code here:
+        evt.getPoint();
+        int seleccionado = this.tablaVerbos.rowAtPoint(evt.getPoint());
+        this.idVerbo = Integer.parseInt(this.tablaVerbos.getValueAt(seleccionado, 0).toString());
+
+        String[] opciones = {"Eliminar verbo", "Modificar verbo"};
+        String respuesta = (String) JOptionPane.showInputDialog(null, "Seleccione una opción",
+                "Seleccione una opción", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
+
+        int dialogButton;
+
+        if (respuesta.equals("Eliminar verbo")) {
+
+            dialogButton = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el verbo?", "Eliminar verbo",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (dialogButton == JOptionPane.YES_OPTION) {
+
+                int[] ids = ListaVerboDao.consultarIds(this.idVerbo);
+                boolean eliminado = ListaVerboDao.eliminarVerbo(ids);
+                if (eliminado) {
+                    this.consultarVerbos();
+                    JOptionPane.showMessageDialog(this, "Verbo movido a papelera de reciclaje");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ocurrio un error al eliminar");
+                }
+            } else if (dialogButton == JOptionPane.NO_OPTION) {
+
+            }
+
+        } else if (respuesta.equals("Modificar verbo")) {
+
+            dialogButton = JOptionPane.showConfirmDialog(null, "¿Desea modificar el verbo?", "Modificar verbo",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (dialogButton == JOptionPane.YES_OPTION) {
+
+            } else if (dialogButton == JOptionPane.NO_OPTION) {
+
+            }
+
+        }
     }//GEN-LAST:event_tablaVerbosMouseClicked
 
-    
     public void consultarVerbos() {
-        tabla = new DefaultTableModel(new String[]{"Español", "Infinitivo", "Pasado simple",
+        tabla = new DefaultTableModel(new String[]{"Nº", "Español", "Infinitivo", "Pasado simple",
             "Pasado participio",}, 0);
 
         List<VerboBean> listaVerbos = ListaVerboDao.consultarVerbos();
-        
 
         for (VerboBean verbo : listaVerbos) {
-            Object[] objeto = {verbo.getNombreEspanol(), verbo.getNombreInfinitivo(),
+            Object[] objeto = {verbo.getIdEspanol(), verbo.getNombreEspanol(), verbo.getNombreInfinitivo(),
                 verbo.getNombrePasadoSimple(), verbo.getNombrePasadoParticipio()};
             tabla.addRow(objeto);
         }
 
         tablaVerbos.setModel(tabla);
     }
+
     /**
      * @param args the command line arguments
      */

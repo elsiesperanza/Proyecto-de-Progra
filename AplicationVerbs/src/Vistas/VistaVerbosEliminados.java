@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 public class VistaVerbosEliminados extends javax.swing.JFrame {
 
     DefaultTableModel tablaVerbos;
+    private int idVerbo;
 
     /**
      * Creates new form VistaVerbosEliminados
@@ -56,6 +57,11 @@ public class VistaVerbosEliminados extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         btnVaciarPapeleria.setText("Vaciar papeleria");
@@ -127,14 +133,67 @@ public class VistaVerbosEliminados extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarMouseClicked
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+
+        evt.getPoint();
+        int seleccionado = this.jTable1.rowAtPoint(evt.getPoint());
+        this.idVerbo = Integer.parseInt(this.jTable1.getValueAt(seleccionado, 0).toString());
+
+        String[] opciones = {"Eliminar verbo", "Recuperar verbo"};
+        String respuesta = (String) JOptionPane.showInputDialog(null, "Seleccione una opción",
+                "Seleccione una opción", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
+
+        if (respuesta.equals("Eliminar verbo")) {
+
+            int dialogButton = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el verbo de la papelera de reciclaje?",
+                    "Eliminar verbo", JOptionPane.YES_NO_OPTION);
+
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                int[] ids = VerboEliminadoDao.consultarIds(this.idVerbo);
+                if (ids != null) {
+                    boolean eliminado = VerboEliminadoDao.eliminarVerboPapeleria(ids);
+                    if (eliminado) {
+                        this.consultarVerbosEliminados();
+                        JOptionPane.showMessageDialog(this, "El verbo ha sido eliminado de la papelera de reciclaje");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error al eliminar el verbo");
+                    }
+                }
+            } else if (dialogButton == JOptionPane.NO_OPTION) {
+                JOptionPane.showMessageDialog(this, "Opcion cancelada");
+            }
+        } else if (respuesta.equals("Recuperar verbo")) {
+            int dialogButton = JOptionPane.showConfirmDialog(null, "¿Desea recuperar el verbo de la papelera de reciclaje?",
+                    "Recuperar verbo", JOptionPane.YES_NO_OPTION);
+
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                int[] ids = VerboEliminadoDao.consultarIds(this.idVerbo);
+                if (ids != null) {
+                    
+                    boolean recuperado = VerboEliminadoDao.recuperarVerboPapeleria(ids);
+                    if (recuperado) {
+                        this.consultarVerbosEliminados();
+                        JOptionPane.showMessageDialog(this, "El verbo ha sido recuperado de la papelera de reciclaje");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error al recuperar el verbo");
+                    }
+                }
+            } else if (dialogButton == JOptionPane.NO_OPTION) {
+                JOptionPane.showMessageDialog(this, "Opcion cancelada");
+            }
+        }
+
+
+    }//GEN-LAST:event_jTable1MouseClicked
+
     public void consultarVerbosEliminados() {
-        tablaVerbos = new DefaultTableModel(new String[]{"Español", "Infinitivo", "Pasado simple",
+        tablaVerbos = new DefaultTableModel(new String[]{"Nº", "Español", "Infinitivo", "Pasado simple",
             "Pasado participio",}, 0);
 
         List<VerboBean> listaVerbos = VerboEliminadoDao.consultarVerbosEliminados();
 
         for (VerboBean verbo : listaVerbos) {
-            Object[] objeto = {verbo.getNombreEspanol(), verbo.getNombreInfinitivo(),
+            Object[] objeto = {verbo.getIdEspanol(), verbo.getNombreEspanol(), verbo.getNombreInfinitivo(),
                 verbo.getNombrePasadoSimple(), verbo.getNombrePasadoParticipio()};
             tablaVerbos.addRow(objeto);
         }

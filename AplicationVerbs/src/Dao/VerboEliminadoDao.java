@@ -60,7 +60,7 @@ public class VerboEliminadoDao {
 
     public static boolean vaciarPapeleria() {
         boolean eliminado = false;
-        System.out.println("VACIAR PAPELERIA");
+
         try {
 
             Connection conexion = ConexionSQL.getConnection();
@@ -74,19 +74,19 @@ public class VerboEliminadoDao {
                 ps = conexion.prepareStatement(consultaSql);
                 ps.execute();
                 eliminado = true;
-                
+
                 if (eliminado) {
                     consultaSql = "DELETE FROM Infinitivo WHERE estado=0";
                     ps = conexion.prepareStatement(consultaSql);
                     ps.execute();
                     eliminado = true;
-                                        
+
                     if (eliminado) {
                         consultaSql = "DELETE FROM Espanol WHERE estado=0";
                         ps = conexion.prepareStatement(consultaSql);
                         ps.execute();
                         eliminado = true;
-                        
+
                     }
 
                 }
@@ -99,5 +99,131 @@ public class VerboEliminadoDao {
             System.out.println("Error ocurrido en VerboEliminadoDao.vaciarPapeleria:" + ex);
         }
         return eliminado;
+    }
+
+    public static boolean eliminarVerboPapeleria(int[] ids) {
+        boolean eliminado = false;
+
+        try {
+
+            Connection conexion = ConexionSQL.getConnection();
+            consultaSql = "DELETE FROM PasadoParticipio WHERE id_pasado_simple=?";
+            PreparedStatement ps = conexion.prepareStatement(consultaSql);
+            ps.setInt(1, ids[2]);
+            ps.execute();
+            eliminado = true;
+
+            if (eliminado) {
+                consultaSql = "DELETE FROM PasadoSimple WHERE id_infinitivo=?";
+                ps = conexion.prepareStatement(consultaSql);
+                ps.setInt(1, ids[1]);
+                ps.execute();
+                eliminado = true;
+
+                if (eliminado) {
+                    consultaSql = "DELETE FROM Infinitivo WHERE id_espanol=?";
+                    ps = conexion.prepareStatement(consultaSql);
+                    ps.setInt(1, ids[0]);
+                    ps.execute();
+                    eliminado = true;
+
+                    if (eliminado) {
+                        consultaSql = "DELETE FROM Espanol WHERE id_espanol=?";
+                        ps = conexion.prepareStatement(consultaSql);
+                        ps.setInt(1, ids[0]);
+                        ps.execute();
+                        eliminado = true;
+
+                    }
+
+                }
+            }
+
+            ps.close();
+            conexion.close();
+        } catch (SQLException ex) {
+
+            System.out.println("Error ocurrido en VerboEliminadoDao.vaciarPapeleria:" + ex);
+        }
+        return eliminado;
+    }
+
+    public static int[] consultarIds(int idEspanol) {
+        int[] ids = new int[4];
+
+        try {
+            Connection conexion = ConexionSQL.getConnection();
+            consultaSql = "SELECT Espanol.id_espanol,Infinitivo.id_infinitivo ,PasadoSimple.id_pasado_simple,PasadoParticipio.id_pasado_participio FROM Espanol\n"
+                    + "INNER JOIN Infinitivo ON Espanol.id_espanol=Infinitivo.id_espanol\n"
+                    + "INNER JOIN PasadoSimple ON Infinitivo.id_infinitivo=PasadoSimple.id_infinitivo\n"
+                    + "INNER JOIN PasadoParticipio ON PasadoParticipio.id_pasado_simple=PasadoSimple.id_pasado_simple\n"
+                    + "WHERE Espanol.id_espanol=?";
+
+            PreparedStatement ps = conexion.prepareStatement(consultaSql);
+            ps.setInt(1, idEspanol);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ids[0] = rs.getInt(1);
+                ids[1] = rs.getInt(2);
+                ids[2] = rs.getInt(3);
+                ids[3] = rs.getInt(4);
+            }
+
+            rs.close();
+            ps.close();
+            conexion.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error en VerboEliminadoDao.consultarIds:" + ex);
+        }
+        return ids;
+    }
+    
+    public static boolean recuperarVerboPapeleria(int[] ids) {
+        boolean recuperado = false;
+
+        try {
+
+            Connection conexion = ConexionSQL.getConnection();
+            consultaSql = "UPDATE PasadoParticipio SET estado=0 WHERE id_pasado_simple=?";
+            PreparedStatement ps = conexion.prepareStatement(consultaSql);
+            ps.setInt(1, ids[2]);
+            ps.execute();
+            recuperado = true;
+
+            if (recuperado) {
+                consultaSql = "UPDATE PasadoSimple SET estado=1 WHERE id_infinitivo=?";
+                ps = conexion.prepareStatement(consultaSql);
+                ps.setInt(1, ids[1]);
+                ps.execute();
+                recuperado = true;
+
+                if (recuperado) {
+                    consultaSql = "UPDATE Infinitivo SET estado=1 WHERE id_espanol=?";
+                    ps = conexion.prepareStatement(consultaSql);
+                    ps.setInt(1, ids[0]);
+                    ps.execute();
+                    recuperado = true;
+
+                    if (recuperado) {
+                        consultaSql = "UPDATE Espanol SET estado=1 WHERE id_espanol=?";
+                        ps = conexion.prepareStatement(consultaSql);
+                        ps.setInt(1, ids[0]);
+                        ps.execute();
+                        recuperado = true;
+
+                    }
+
+                }
+            }
+
+            ps.close();
+            conexion.close();
+        } catch (SQLException ex) {
+
+            System.out.println("Error ocurrido en VerboEliminadoDao.vaciarPapeleria:" + ex);
+        }
+        return recuperado;
     }
 }
