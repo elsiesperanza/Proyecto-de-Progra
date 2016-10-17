@@ -5,6 +5,16 @@
  */
 package Vistas;
 
+import Bean.VerboBean;
+import Dao.ModificarVerboDao;
+import Dao.PracticarDao;
+import java.awt.Color;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
@@ -14,10 +24,17 @@ public class VistaPracticar extends javax.swing.JFrame {
     /**
      * Creates new form VistaPracticar
      */
+    int[] idsVerbos;
+    VerboBean verbo;
+    int id;
+    URL url;
+    ImageIcon icon;
+
     public VistaPracticar() {
         initComponents();
         setResizable(false);//no se maximice
         setLocationRelativeTo(null);//aparezca enmedio
+        this.cambiarVerbo();
     }
 
     /**
@@ -32,7 +49,7 @@ public class VistaPracticar extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        laberEspanol = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         btnCambiarVerbo = new javax.swing.JButton();
         btnVerRespuesta = new javax.swing.JButton();
@@ -42,6 +59,10 @@ public class VistaPracticar extends javax.swing.JFrame {
         txtInfinitivo = new javax.swing.JTextField();
         txtPasadoSimple = new javax.swing.JTextField();
         txtPasadoParticipio = new javax.swing.JTextField();
+        btnRevisar = new javax.swing.JButton();
+        labelImagenInfinitivo = new javax.swing.JLabel();
+        labelImagenPS = new javax.swing.JLabel();
+        labelImagenPP = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,8 +72,8 @@ public class VistaPracticar extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Verbo:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("-");
+        laberEspanol.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        laberEspanol.setText("-");
 
         jButton1.setText("Regresar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -62,8 +83,18 @@ public class VistaPracticar extends javax.swing.JFrame {
         });
 
         btnCambiarVerbo.setText("Cambiar verbo");
+        btnCambiarVerbo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCambiarVerboMouseClicked(evt);
+            }
+        });
 
         btnVerRespuesta.setText("Ver respuestas");
+        btnVerRespuesta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVerRespuestaMouseClicked(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Infinitiivo:");
@@ -74,49 +105,64 @@ public class VistaPracticar extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Pasado participio:");
 
+        btnRevisar.setText("Revisar");
+        btnRevisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRevisarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(34, 34, 34)
-                                .addComponent(jLabel3)))))
-                .addContainerGap(209, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRevisar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnVerRespuesta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCambiarVerbo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtPasadoSimple, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                            .addComponent(txtInfinitivo, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPasadoParticipio))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(159, 159, 159)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(laberEspanol)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel4))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(txtPasadoSimple, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                                                .addComponent(txtPasadoParticipio))
+                                            .addComponent(txtInfinitivo, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(47, 47, 47))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(labelImagenInfinitivo, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                        .addComponent(labelImagenPP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labelImagenPS, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,25 +174,34 @@ public class VistaPracticar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtInfinitivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtPasadoSimple, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(laberEspanol))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelImagenInfinitivo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtInfinitivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtPasadoSimple, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(labelImagenPS, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtPasadoParticipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPasadoParticipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelImagenPP, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btnCambiarVerbo)
-                    .addComponent(btnVerRespuesta))
-                .addContainerGap(38, Short.MAX_VALUE))
+                    .addComponent(btnVerRespuesta)
+                    .addComponent(btnRevisar))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
@@ -156,7 +211,98 @@ public class VistaPracticar extends javax.swing.JFrame {
         VistaPrincipal vistaPrincipal = new VistaPrincipal();
         vistaPrincipal.setVisible(true);
         this.dispose();
+        getContentPane().setBackground(Color.white);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnCambiarVerboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCambiarVerboMouseClicked
+
+        btnRevisar.setEnabled(true);
+        btnVerRespuesta.setEnabled(true);
+
+        txtInfinitivo.setText("");
+        txtPasadoSimple.setText("");
+        txtPasadoParticipio.setText("");
+
+        url = this.getClass().getResource("");
+        icon = new ImageIcon(url);
+        
+        labelImagenInfinitivo.setIcon(icon);
+        labelImagenPS.setIcon(icon);
+        labelImagenPP.setIcon(icon);
+
+        this.cambiarVerbo();
+
+    }//GEN-LAST:event_btnCambiarVerboMouseClicked
+
+    private void btnVerRespuestaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerRespuestaMouseClicked
+
+        txtInfinitivo.setText(verbo.getNombreInfinitivo());
+        txtPasadoSimple.setText(verbo.getNombrePasadoSimple());
+        txtPasadoParticipio.setText(verbo.getNombrePasadoParticipio());
+
+        btnRevisar.setEnabled(false);
+        btnVerRespuesta.setEnabled(false);
+    }//GEN-LAST:event_btnVerRespuestaMouseClicked
+
+    private void btnRevisarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRevisarMouseClicked
+
+        if (!txtInfinitivo.getText().toString().equals("")
+                && !txtPasadoParticipio.getText().toString().equals("")
+                && !txtPasadoSimple.getText().toString().equals("")) {
+
+            if (txtInfinitivo.getText().toString().toLowerCase().equals(verbo.getNombreInfinitivo().toLowerCase())) {
+                url = this.getClass().getResource("/Imagenes/Boton_correcto.png");
+                icon = new ImageIcon(url);
+                labelImagenInfinitivo.setIcon(icon);
+            } else {
+                url = this.getClass().getResource("/Imagenes/Boton_error.png");
+                icon = new ImageIcon(url);
+                labelImagenInfinitivo.setIcon(icon);
+            }
+
+            if (txtPasadoSimple.getText().toString().toLowerCase().equals(verbo.getNombrePasadoSimple().toLowerCase())) {
+                url = this.getClass().getResource("/Imagenes/Boton_correcto.png");
+                icon = new ImageIcon(url);
+                labelImagenPS.setIcon(icon);
+            } else {
+                url = this.getClass().getResource("/Imagenes/Boton_error.png");
+                icon = new ImageIcon(url);
+                labelImagenPS.setIcon(icon);
+            }
+
+            if (txtPasadoParticipio.getText().toString().toLowerCase().equals(verbo.getNombrePasadoParticipio().toLowerCase())) {
+                url = this.getClass().getResource("/Imagenes/Boton_correcto.png");
+                icon = new ImageIcon(url);
+                labelImagenPP.setIcon(icon);
+            } else {
+                url = this.getClass().getResource("/Imagenes/Boton_error.png");
+                icon = new ImageIcon(url);
+                labelImagenPP.setIcon(icon);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Favor de llenar todos los campos");
+        }
+
+    }//GEN-LAST:event_btnRevisarMouseClicked
+
+    public void cambiarVerbo() {
+
+        int numero;
+        List<VerboBean> listaVerbo = new ArrayList<>();
+        idsVerbos = PracticarDao.consultarVerbos();
+
+        if (idsVerbos.length > 0) {
+            numero = (int) (Math.random() * ((idsVerbos.length - 1) - 0 + 1) + 0);
+            id = idsVerbos[numero];
+
+            listaVerbo = PracticarDao.consultarVerbo(id);
+            if (!listaVerbo.isEmpty()) {
+                verbo = listaVerbo.get(0);
+                laberEspanol.setText(verbo.getNombreEspanol());
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -195,15 +341,19 @@ public class VistaPracticar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiarVerbo;
+    private javax.swing.JButton btnRevisar;
     private javax.swing.JButton btnVerRespuesta;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel labelImagenInfinitivo;
+    private javax.swing.JLabel labelImagenPP;
+    private javax.swing.JLabel labelImagenPS;
+    private javax.swing.JLabel laberEspanol;
     private javax.swing.JTextField txtInfinitivo;
     private javax.swing.JTextField txtPasadoParticipio;
     private javax.swing.JTextField txtPasadoSimple;

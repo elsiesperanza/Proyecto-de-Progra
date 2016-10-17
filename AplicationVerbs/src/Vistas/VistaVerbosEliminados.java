@@ -7,6 +7,7 @@ package Vistas;
 
 import Bean.VerboBean;
 import Dao.VerboEliminadoDao;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +29,7 @@ public class VistaVerbosEliminados extends javax.swing.JFrame {
         setResizable(false);//evitar maximizar
         setLocationRelativeTo(null);//aparezca enmedio la pantalla
         this.consultarVerbosEliminados();
+        getContentPane().setBackground(Color.white);
     }
 
     @SuppressWarnings("unchecked")

@@ -10,6 +10,7 @@ import Bean.InfinitivoBean;
 import Bean.PasadoParticipioBean;
 import Bean.PasadoSimpleBean;
 import Dao.RegistrarVerboDao;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +26,7 @@ public class VistaRegistrarVerbo extends javax.swing.JFrame {
         initComponents();
         setResizable(false);//Evitar maximizar la pantalla
         setLocationRelativeTo(null);//Aparezca la pantalla enmedio
+        getContentPane().setBackground(Color.white);
     }
 
     /**

@@ -7,6 +7,7 @@ package Vistas;
 
 import Bean.VerboBean;
 import Dao.ModificarVerboDao;
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -26,6 +27,7 @@ public class VistaModificarVerbo extends JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        getContentPane().setBackground(Color.white);
 
         this.parent = parentParam;
         parent.setVisible(false);

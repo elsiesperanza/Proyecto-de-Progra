@@ -8,6 +8,7 @@ package Vistas;
 import Bean.VerboBean;
 import Dao.ListaVerboDao;
 import Dao.VerboEliminadoDao;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +30,7 @@ public class VistaListaVerbo extends javax.swing.JFrame {
         setResizable(false);//no se maximice la pantalla
         setLocationRelativeTo(null);//aparezca enmedio
         this.consultarVerbos();
+        getContentPane().setBackground(Color.white);
     }
 
     /**

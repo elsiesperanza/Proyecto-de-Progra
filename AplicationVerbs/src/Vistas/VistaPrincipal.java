@@ -5,6 +5,8 @@
  */
 package Vistas;
 
+import java.awt.Color;
+
 /**
  *
  * @author Admin
@@ -18,6 +20,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         initComponents();
         setResizable(false);//Evitar que se maximise
         setLocationRelativeTo(null);//Aparezca enmedio la pantalla
+        getContentPane().setBackground(Color.white);
     }
 
     /**
